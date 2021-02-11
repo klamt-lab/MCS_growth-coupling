@@ -425,7 +425,9 @@ function [mcs, comptime] = MCS_enum_thread(gene_mcs,cnap,modules,...
         save(filename,'gene_mcs','cnap','modules','rkoCost','maxSolutions','maxCost','gkoCost','options','verbose');
         wd = pwd;
         cd(evalin('base','cnan.cnapath'));
-        system(['matlab -nosplash -nodesktop -r "compute_MCS_ext(''' wdir ''',''' filename ''')"']);
+        system(['matlab -nosplash -nodesktop -r "addpath(''' genpath(fileparts(mfilename('fullpath'))) ''');' ... % add project path
+               'addpath(''' evalin('base','cnan.cnapath') ''');' ... % add CNA path
+               'compute_mcs_ext(''' wdir ''',''' filename ''')"']); % compute
         cd(wd);
         load(filename,'mcs','comptime');
         rmdir(wdir,'s');

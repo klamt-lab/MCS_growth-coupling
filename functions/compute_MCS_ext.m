@@ -1,4 +1,4 @@
-function compute_MCS_ext(jdir, filename)
+function compute_mcs_ext(jdir, filename)
     startcna(1);
     if ~isempty(getenv('SLURM_JOB_ID')) && isempty(gcp('nocreate'))
         tempdir = getenv('SLURM_TEMP');

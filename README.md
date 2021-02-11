@@ -87,7 +87,7 @@ Other functions required for the scripts above:
    Between two sets of MCS, identify matching MCS, MCS subsets and supersets.
 
 9. functions/**compute_MCS_ext**
-   Call the MCS computation function in a new MATLAB instance.
+   MCS computation function that is run by a new MATLAB instance.
 
 10. functions/**plot_mcs_relationships.m**
 
