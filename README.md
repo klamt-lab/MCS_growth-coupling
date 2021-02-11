@@ -33,7 +33,7 @@ Getting Started:
 2. Download the *E. coli* model iML1515 from here http://bigg.ucsd.edu/static/models/iML1515.mat. Place it in the project folder.
 3. Start MATLAB.
 4. Add the main directory of your installation of the *CellNetAnalyzer* toolbox to your MATLAB path.
-5. Add the project folder to your MATLAB path.
+5. Add the project folder and the subdirectory 'functions' to your MATLAB path.
 
 Script Files:
 -------------

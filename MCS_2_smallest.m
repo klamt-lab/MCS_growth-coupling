@@ -418,7 +418,8 @@ function [mcs, comptime] = MCS_enum_thread(gene_mcs,cnap,modules,...
             tempdir = getenv('SLURM_TEMP');
         else
             tempdir = eval('tempdir');
-        end                              
+        end
+        rng('shuffle');
         wdir = [tempdir num2str(randi([0,1e6-1])) filesep];
         mkdir(wdir);
         filename = [wdir 'ws_' num2str(randi([0,1e6-1])) '.mat'];
@@ -426,7 +427,7 @@ function [mcs, comptime] = MCS_enum_thread(gene_mcs,cnap,modules,...
         wd = pwd;
         cd(evalin('base','cnan.cnapath'));
         system(['matlab -nosplash -nodesktop -r "addpath(''' genpath(fileparts(mfilename('fullpath'))) ''');' ... % add project path
-               'addpath(''' evalin('base','cnan.cnapath') ''');' ... % add CNA path
+               'addpath(''' evalin('base','cnan.cnapath') ''');startcna(1);' ... % add CNA path and start CNA
                'compute_mcs_ext(''' wdir ''',''' filename ''');exit()"']); % compute
         cd(wd);
         load(filename,'mcs','comptime');
