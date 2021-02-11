@@ -1,4 +1,5 @@
 function compute_mcs_ext(jdir, filename)
+try
     startcna(1);
     if ~isempty(getenv('SLURM_JOB_ID')) && isempty(gcp('nocreate'))
         tempdir = getenv('SLURM_TEMP');
@@ -36,5 +37,12 @@ function compute_mcs_ext(jdir, filename)
     end
     comptime = toc;
     save(filename,'mcs','comptime');
-    exit();
+catch err
+    warning('off','backtrace')
+    if cnan.math_prog_type == 0
+      warning( getReport( err, 'extended', 'hyperlinks', 'on' ) ); % getReport not yet implemented in octave
+    end
+    warning('Something went wrong.');
+    warning('on','backtrace')
+end
 end
