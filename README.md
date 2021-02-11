@@ -42,8 +42,8 @@ Script Files:
 
 1. **MCS_1_coupling_degrees.m**
 
-   Computes exhaustively all minimal cut sets up to three gene knockouts for the weakly and strongly growth-coupled and substrate-uptake coupled 
-   production of ethanol with *E. coli*. A subnetwork/core network (ca. 600 reactions) of the iML1515 is used to shorten the computation runtime.
+   Computes **exhaustively all minimal cut sets up to three gene knockouts for the weakly and strongly growth-coupled and substrate-uptake coupled 
+   production of ethanol** with *E. coli*. A subnetwork/core network (ca. 600 reactions) of the iML1515 is used to shorten the computation runtime.
    Finally, the relationship between the MCS sets of the different coupling types is plotted. The user can set/unset the flag to de-/activate the 
    minimum ATP maintenance demand.
 
@@ -69,10 +69,10 @@ Script Files:
 
 4. **MCS_4_ACP.m** 
 
-   Computes exhaustively all minimal cut sets up to three gene knockouts for the strongly growth-coupled, ATP-coupled and substrate-uptake coupled 
-   production of ethanol with *E. coli*. A subnetwork/core network (ca. 600 reactions) of the iML1515 is used to shorten the computation runtime.
-   The minimum ATP maintenace demand from the original iML1515 is omitted. Finally, the relationships between the MCS sets of the different coupling 
-   types are plotted.
+   Computes **exhaustively all minimal cut sets up to three gene knockouts for the strongly growth-coupled, ATP-coupled and substrate-uptake coupled 
+   production of ethanol** with *E. coli*. A subnetwork/core network (ca. 600 reactions) of the iML1515 is used to shorten the computation runtime.
+   The minimum ATP maintenace demand from the original *iML1515* model is omitted. Finally, the relationships between the MCS sets of the different 
+   coupling types are plotted.
 
 Other functions required for the scripts above:
 -----------------------------------------------
