@@ -1,8 +1,9 @@
-function p = plot_mcs_relationships(reac_names,mcs_weakGC,mcs_strongGC,mcs_substUp)
+function p = plot_mcs_relationships(reac_names,mcs_1,mcs_2,mcs_3)
+% Plot different sets of MCS side by side for easy comparison 
 
-[~,~,~,a] = compare_mcs_sets(mcs_strongGC,mcs_weakGC);
-[~,~,~,b] = compare_mcs_sets(mcs_substUp,mcs_weakGC);
-[~,~,~,c] = compare_mcs_sets(mcs_substUp,mcs_strongGC);
+[~,~,~,a] = compare_mcs_sets(mcs_2,mcs_1);
+[~,~,~,b] = compare_mcs_sets(mcs_3,mcs_1);
+[~,~,~,c] = compare_mcs_sets(mcs_3,mcs_2);
 e = ~(c*a) .* b;
 
 % check for completeness
@@ -15,78 +16,78 @@ else
     disp('No hierarchy of MCS.');
 end
 
-link_weak_strong            = cell(size(mcs_weakGC,2),1);
-link_weak_strong_type       = zeros(size(mcs_weakGC,2),1);
+link_1_2            = cell(size(mcs_1,2),1);
+link_1_2_type       = zeros(size(mcs_1,2),1);
 [ro,co] = find(a);
 for i = unique(co(:))'
-    link_weak_strong{i} = ro(co==i)';
-    link_weak_strong_type(i) = max(a(:,i));
+    link_1_2{i} = ro(co==i)';
+    link_1_2_type(i) = max(a(:,i));
 end
-link_strong_substrate       = cell(size(mcs_strongGC,2),1);
-link_strong_substrate_type  = zeros(size(mcs_strongGC,2),1);
+link_2_3       = cell(size(mcs_2,2),1);
+link_2_3_type  = zeros(size(mcs_2,2),1);
 [ro,co] = find(c);
 for i = unique(co(:))'
-    link_strong_substrate{i} = ro(co==i)';
-    link_strong_substrate_type(i) = max(c(:,i));
+    link_2_3{i} = ro(co==i)';
+    link_2_3_type(i) = max(c(:,i));
 end
-link_weak_substrate         = cell(size(mcs_weakGC,2),1);
-link_weak_substrate_type    = zeros(size(mcs_weakGC,2),1);
+link_1_3         = cell(size(mcs_1,2),1);
+link_1_3_type    = zeros(size(mcs_1,2),1);
 [ro,co] = find(e);
 for i = unique(co(:))'
-    link_weak_substrate{i} = ro(co==i)';
-    link_weak_substrate_type(i) = max(e(:,i));
+    link_1_3{i} = ro(co==i)';
+    link_1_3_type(i) = max(e(:,i));
 end
 
 % draw graph
 G = digraph();
 x = [];
 y = [];
-mcs_text = cell(size(mcs_weakGC,2)+size(mcs_strongGC,2)+size(mcs_substUp,2),1);
-for i = 1:size(mcs_weakGC,2)
-    G = G.addnode(['weak_GC' num2str(i)]);
+mcs_text = cell(size(mcs_1,2)+size(mcs_2,2)+size(mcs_3,2),1);
+for i = 1:size(mcs_1,2)
+    G = G.addnode(['MCS_set_1' num2str(i)]);
 %     mcs_text{G.numnodes,1} = num2str(sum(abs(mcs_weakGC(:,i))));
 %     mcs_text{G.numnodes,1} = mcs2text(reac_names,mcs_weakGC(:,i));
-    mcs_text{G.numnodes,1} = [num2str(sum(abs(mcs_weakGC(:,i)))) ' (' mcs2text(reac_names,mcs_weakGC(:,i)) ')'];
+    mcs_text{G.numnodes,1} = [num2str(sum(abs(mcs_1(:,i)))) ' (' mcs2text(reac_names,mcs_1(:,i)) ')'];
     x = [x 0];
-    y = [y size(mcs_weakGC,2)-i];
+    y = [y size(mcs_1,2)-i];
 end
-for i = 1:size(mcs_strongGC,2)
-    G = G.addnode(['strong_GC' num2str(i)]);
+for i = 1:size(mcs_2,2)
+    G = G.addnode(['MCS_set_2' num2str(i)]);
 %     mcs_text{G.numnodes,1} = num2str(sum(abs(mcs_strongGC(:,i))));
 %     mcs_text{G.numnodes,1} = mcs2text(reac_names,mcs_strongGC(:,i));
-    mcs_text{G.numnodes,1} = [num2str(sum(abs(mcs_strongGC(:,i)))) ' (' mcs2text(reac_names,mcs_strongGC(:,i)) ')'];
+    mcs_text{G.numnodes,1} = [num2str(sum(abs(mcs_2(:,i)))) ' (' mcs2text(reac_names,mcs_2(:,i)) ')'];
 %     x = [x 3+i];
 %     y = [y size(mcs_strongGC,2)-i];
     x = [x 5];
-    y = [y max(size(mcs_weakGC,2),size(mcs_substUp,2))+size(mcs_weakGC,2)-i];
+    y = [y max(size(mcs_1,2),size(mcs_3,2))+size(mcs_1,2)-i];
 end
-for i = 1:size(mcs_substUp,2)
-    G = G.addnode(['substrate_uptake_C' num2str(i)]);
+for i = 1:size(mcs_3,2)
+    G = G.addnode(['MCS_set_3' num2str(i)]);
 %     mcs_text{G.numnodes,1} = num2str(sum(abs(mcs_substUp(:,i))));
 %     mcs_text{G.numnodes,1} = mcs2text(reac_names,mcs_substUp(:,i));
-    mcs_text{G.numnodes,1} = [num2str(sum(abs(mcs_substUp(:,i)))) ' (' mcs2text(reac_names,mcs_substUp(:,i)) ')'];
+    mcs_text{G.numnodes,1} = [num2str(sum(abs(mcs_3(:,i)))) ' (' mcs2text(reac_names,mcs_3(:,i)) ')'];
 %     x = [x 3+i];
 %     y = [y -3];
     x = [x 10];
-    y = [y size(mcs_weakGC,2)-i];
+    y = [y size(mcs_1,2)-i];
 end
 mcs_text = strrep(mcs_text,'EX\_o2\_e','O_2');
 
 edges = nan(0,3); % source, target, type (identical = 3, subset = 2, superset = 1)
-for i = 1:size(mcs_weakGC,2)
-    target = link_weak_strong{i};
+for i = 1:size(mcs_1,2)
+    target = link_1_2{i};
     for j = target
-        edges = [edges; i j+size(mcs_weakGC,2) link_weak_strong_type(i)];
+        edges = [edges; i j+size(mcs_1,2) link_1_2_type(i)];
     end
-    target = link_weak_substrate{i};
+    target = link_1_3{i};
     for j = target
-        edges = [edges; i j+size(mcs_weakGC,2)+size(mcs_strongGC,2) link_weak_substrate_type(i)];
+        edges = [edges; i j+size(mcs_1,2)+size(mcs_2,2) link_1_3_type(i)];
     end
 end
-for i = 1:size(mcs_strongGC,2)
-    target = link_strong_substrate{i};
+for i = 1:size(mcs_2,2)
+    target = link_2_3{i};
     for j = target
-        edges = [edges; i+size(mcs_weakGC,2) j+size(mcs_weakGC,2)+size(mcs_strongGC,2) link_strong_substrate_type(i)];
+        edges = [edges; i+size(mcs_1,2) j+size(mcs_1,2)+size(mcs_2,2) link_2_3_type(i)];
     end
 end
 color = nan(size(edges,1),1);
@@ -106,14 +107,14 @@ p = plot(G,'XData',x,'YData',y,'EdgeCData',color,'NodeLabel',mcs_text);
 
 % title
 plot_title = {};
-if ~isempty(mcs_weakGC)
-    plot_title = [plot_title {'weak GC MCS'}];
+if ~isempty(mcs_1)
+    plot_title = [plot_title {'MCS set 1'}];
 end
-if ~isempty(mcs_strongGC)
-    plot_title = [plot_title {'strong GC MCS'}];
+if ~isempty(mcs_2)
+    plot_title = [plot_title {'MCS set 2'}];
 end
-if ~isempty(mcs_substUp)
-    plot_title = [plot_title {'subup C MCS'}];
+if ~isempty(mcs_3)
+    plot_title = [plot_title {'MCS set 3'}];
 end
 title(strjoin(plot_title,'     vs     '));
 
@@ -122,17 +123,17 @@ title(strjoin(plot_title,'     vs     '));
 caxis([0 10]);
 
 % layout
-if ~isempty(mcs_weakGC)
-    sources = 1:size(mcs_weakGC,2);
-elseif ~isempty(mcs_strongGC) && ~isempty(mcs_substUp)
-    sources = 1:size(mcs_strongGC,2);
+if ~isempty(mcs_1)
+    sources = 1:size(mcs_1,2);
+elseif ~isempty(mcs_2) && ~isempty(mcs_3)
+    sources = 1:size(mcs_2,2);
 else
     sources = [];
 end
-if ~isempty(mcs_substUp)
-    sinks = size(mcs_weakGC,2)+size(mcs_strongGC,2)+(1:size(mcs_substUp,2));
-elseif ~isempty(mcs_strongGC) && ~isempty(mcs_weakGC)
-    sinks = size(mcs_weakGC,2)+(1:size(mcs_strongGC,2));
+if ~isempty(mcs_3)
+    sinks = size(mcs_1,2)+size(mcs_2,2)+(1:size(mcs_3,2));
+elseif ~isempty(mcs_2) && ~isempty(mcs_1)
+    sinks = size(mcs_1,2)+(1:size(mcs_2,2));
 else
     sinks = [];
 end

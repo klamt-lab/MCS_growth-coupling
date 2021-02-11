@@ -21,7 +21,7 @@
 
 maxSolutions = inf;
 coupling = {'strong growth-coupling' 'ATP coupling' 'substrate uptake coupling'};
-maxCost = 3;
+maxCost = 4;
 options.mcs_search_mode = 2;
 verbose = 1;
 
@@ -129,7 +129,7 @@ for coupling_i = coupling
             options,verbose);
     disp(['Computation time: ' num2str(toc) ' s']);
     %% 4) Verify MCS
-    disp('Verifying mcs');
+    disp('Verifying MCS');
     if ~isempty(mcs) % if mcs have been found
         if isfield(modules{2},'c')
             [valid_T, valid_D] = verify_mcs(full_cnap,mcs,modules{2}.V*rmap,modules{2}.v,modules{2}.c*rmap,modules{1}.V*rmap,modules{1}.v);
@@ -282,10 +282,16 @@ function [ridx,coeff] = findReacAndCoeff(eq,reacID)
 end
 
 function [valid_T, valid_D] = verify_mcs(cnap,mcs,T,t,c,D,d)
+    if license('test','Distrib_Computing_Toolbox') && isempty(getCurrentTask()) && ...
+           (~isempty(ver('parallel'))  || ~isempty(ver('distcomp'))) && isempty(gcp('nocreate')) %#ok<DCRENAME>
+        numworkers = getfield(gcp('nocreate'),'NumWorkers');
+    else
+        numworkers = 0;
+    end
     mcs = mcs<0;
     valid_T = nan(size(mcs,2),1);
     valid_D = nan(size(mcs,2),1);
-    parfor i = 1:size(mcs,2)
+    parfor (i = 1:size(mcs,2),numworkers)
         cnap_valid = cnap;
         cnap_valid.reacMin(mcs(:,i)) = 0;
         cnap_valid.reacMax(mcs(:,i)) = 0;
