@@ -1,7 +1,5 @@
 # MCS growth-coupling
 
-============
-
 Computing gene knockout strategies (MCS) for different degrees of growth-coupled production
 
 2021/02/11
