@@ -66,7 +66,7 @@ end
 
 % if availabe, use parpool
 if license('test','Distrib_Computing_Toolbox') && isempty(getCurrentTask()) && ...
-       (~isempty(ver('parallel'))  || ~isempty(ver('distcomp'))) && isempty(gcp('nocreate')) %#ok<DCRENAME>
+       (~isempty(ver('parallel'))  || ~isempty(ver('distcomp'))) && isempty(gcp('nocreate')) && ~solve_in_new_process %#ok<DCRENAME>
     parpool();
     wait(parfevalOnAll(@startcna,0,1)); % startcna on all workers
     numworkers = getfield(gcp('nocreate'),'NumWorkers');
