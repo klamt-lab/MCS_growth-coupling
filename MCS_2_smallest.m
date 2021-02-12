@@ -47,8 +47,8 @@ coupling = 'weak growth-coupling';
 product = 1;
 
 % select number and time limit for computations
-num_iter = 12; % 12 computations
-options.milp_time_limit = 7200; % 2h
+num_iter = 6; % 6 computations
+options.milp_time_limit = 14400; % 4h
 
 % choose whether a new instance of MATLAB should be started for each MCS computation.
 % This measure ensures memory cleanup between the MCS runs. (usually not needed with Windows)
@@ -384,7 +384,7 @@ end
 
 function [valid_T, valid_D] = verify_mcs(cnap,mcs,T,t,c,D,d)
     if license('test','Distrib_Computing_Toolbox') && isempty(getCurrentTask()) && ...
-           (~isempty(ver('parallel'))  || ~isempty(ver('distcomp'))) && isempty(gcp('nocreate')) %#ok<DCRENAME>
+           (~isempty(ver('parallel'))  || ~isempty(ver('distcomp'))) && ~isempty(gcp('nocreate')) %#ok<DCRENAME>
         numworkers = getfield(gcp('nocreate'),'NumWorkers');
     else
         numworkers = 0;
@@ -430,6 +430,9 @@ function [mcs, comptime] = MCS_enum_thread(gene_mcs,cnap,modules,...
                'addpath(''' evalin('base','cnan.cnapath') ''');startcna(1);' ... % add CNA path and start CNA
                'compute_mcs_ext(''' wdir ''',''' filename ''');exit()"']); % compute
         cd(wd);
-        load(filename,'mcs','comptime');
+        load(filename,'mcs','comptime','status');
+        if status ~= 0
+            comptime = nan;
+        end
         rmdir(wdir,'s');
 end

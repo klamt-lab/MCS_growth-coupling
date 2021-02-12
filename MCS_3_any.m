@@ -384,7 +384,7 @@ end
 
 function [valid_T, valid_D] = verify_mcs(cnap,mcs,T,t,c,D,d)
     if license('test','Distrib_Computing_Toolbox') && isempty(getCurrentTask()) && ...
-           (~isempty(ver('parallel'))  || ~isempty(ver('distcomp'))) && isempty(gcp('nocreate')) %#ok<DCRENAME>
+           (~isempty(ver('parallel'))  || ~isempty(ver('distcomp'))) && ~isempty(gcp('nocreate')) %#ok<DCRENAME>
         numworkers = getfield(gcp('nocreate'),'NumWorkers');
     else
         numworkers = 0;
@@ -430,6 +430,9 @@ function [mcs, comptime] = MCS_enum_thread(gene_mcs,cnap,modules,...
                'addpath(''' evalin('base','cnan.cnapath') ''');startcna(1);' ... % add CNA path
                'compute_mcs_ext(''' wdir ''',''' filename ''');exit()"']); % compute
         cd(wd);
-        load(filename,'mcs','comptime');
+        load(filename,'mcs','comptime','status');
+        if status ~= 0
+            comptime = nan;
+        end
         rmdir(wdir,'s');
 end
