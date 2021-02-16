@@ -1,10 +1,11 @@
 % This script reproduces the results from Table 3:
 % It computes the smallest MCS for the weakly and strongly growth-coupled
 % and substrate uptake production of 10 different products with E. coli.
+% pGCP: production potential at max growth rate
+% wGCP: production at max growth rate
 % sGCP: prodution at all positive growth rates
-% ACP: prodution at all flux states with ATP maintenance
 % SUCP: prodcution in all flux states
-% Computations are repeated 12 times and have a time limit of 2 hours.
+% Computations are repeated 6 times and have a time limit of 4 hours.
 %
 % MCS computation 
 %
@@ -23,6 +24,7 @@
 %% User settings
 
 % select coupling type:
+% potential growth-coupling
 % weak growth-coupling
 % strong growth-coupling
 % substrate uptake coupling
@@ -69,9 +71,6 @@ if license('test','Distrib_Computing_Toolbox') && isempty(getCurrentTask()) && .
        (~isempty(ver('parallel'))  || ~isempty(ver('distcomp'))) && isempty(gcp('nocreate')) && ~solve_in_new_process %#ok<DCRENAME>
     parpool();
     wait(parfevalOnAll(@startcna,0,1)); % startcna on all workers
-    numworkers = getfield(gcp('nocreate'),'NumWorkers');
-else
-    numworkers = 0;
 end
 
 %% 1) Model setup
@@ -118,7 +117,10 @@ cnap = CNAsetGenericReactionData(cnap,find(strcmp(cellstr(cnap.reacID),'FRD2')),
 cnap = CNAsetGenericReactionData(cnap,find(strcmp(cellstr(cnap.reacID),'FRD3')),'geneProductAssociation','frd*');
 cnap = CNAsetGenericReactionData(cnap,find(strcmp(cellstr(cnap.reacID),'CYTBO3_4pp')),'geneProductAssociation','cyo*');
 cnap = CNAsetGenericReactionData(cnap,find(strcmp(cellstr(cnap.reacID),'THD2pp')),'geneProductAssociation','pnt*');
-cnap = CNAsetGenericReactionData(cnap,find(strcmp(cellstr(cnap.reacID),'PDH')),'geneProductAssociation','ace* and lpd');    
+cnap = CNAsetGenericReactionData(cnap,find(strcmp(cellstr(cnap.reacID),'PDH')),'geneProductAssociation','ace* and lpd');
+cnap = CNAsetGenericReactionData(cnap,find(strcmp(cellstr(cnap.reacID),'AKGDH')),'geneProductAssociation','sucAB and lpd');
+cnap = CNAsetGenericReactionData(cnap,find(strcmp(cellstr(cnap.reacID),'SUCOAS')),'geneProductAssociation','sucCD');
+cnap = CNAsetGenericReactionData(cnap,find(strcmp(cellstr(cnap.reacID),'SUCDi')),'geneProductAssociation','sdh*'); % sdhA,B,C,D
 [~,~,genes,gpr_rules] = CNAgenerateGPRrules(cnap);
 
 %% 2) Define MCS setup
@@ -131,11 +133,6 @@ rkoCost(strcmp(cellstr(cnap.reacID),'EX_o2_e')) = 1;
 [full_cnap, rmap] = CNAintegrateGPRrules(cnap);
 substrate_rID = 'EX_glc__D_e';
 biomass_rID   = 'BIOMASS_Ec_iML1515_core_75p37M';
-
-% Desired fluxes for all coupling cases: growth >= 0.05/h
-modules{1}.sense = 'desired';
-modules{1}.type  = 'lin_constraints';
-[modules{1}.V(1,:),modules{1}.v(1,:)] = genV([{biomass_rID} {'>='} 0.05 ],cnap);
 
 %% compute thresholds:
 % wGCP: At 20% of maximal growth rate, maximize production rate. 
@@ -166,13 +163,22 @@ r_p_20 = 0.2*fv(ismember(cnap.reacID,{product_rID}));
 Y_PBM = r_p_20/r_bm_max20;
 Y_PS  = r_p_20/-fv(ismember(cnap.reacID,{substrate_rID}));
 
-modules{2} = struct;
-clear('T','t');
+clear('modules');
+% Desired fluxes for all coupling cases: growth >= 0.05/h
+modules{1}.sense = 'desired';
+modules{1}.type  = 'lin_constraints';
+[modules{1}.V(1,:),modules{1}.v(1,:)] = genV([{biomass_rID} {'>='} 0.05 ],cnap);
+
 disp(' ');
 disp('=============');
 disp(coupling);
 disp('=============');
 switch coupling
+    case 'potential growth-coupling'
+        modules{1}.type  = 'bilev_w_constr';
+        % Desired flux states with maximal growth and positive ethanol production
+        [modules{1}.V(2,:),modules{1}.v(2,:)] = genV([{product_rID} {'>='} r_p_20 ],cnap);
+        [modules{1}.c(1,:),~]                 = genV([{biomass_rID} {'>='} 0    ],cnap); % maximize biomass
     case 'weak growth-coupling'
         modules{2}.sense = 'target';
         modules{2}.type  = 'bilev_w_constr';
@@ -227,11 +233,15 @@ comptime_mean = mean(comptime);
 
 comptime_succ = num2str(comptime_succ);
 
+%% 4) Verify MCS
+disp('Verifying MCS');
 if ~isempty(mcs(:,succ)) % if mcs have been found
-    if isfield(modules{2},'c')
-        [valid_T, valid_D] = verify_mcs(full_cnap,mcs(:,succ),modules{2}.V*rmap,modules{2}.v,modules{2}.c*rmap,modules{1}.V*rmap,modules{1}.v);
-    else
-        [valid_T, valid_D] = verify_mcs(full_cnap,mcs(:,succ),modules{2}.V*rmap,modules{2}.v,[],modules{1}.V*rmap,modules{1}.v);
+    if isfield(modules{1},'c') % pGCP
+        [valid_T, valid_D] = verify_mcs(full_cnap,mcs,[],[],modules{1}.c*rmap,modules{1}.V*rmap,modules{1}.v);
+    elseif isfield(modules{2},'c') % wGCP
+        [valid_T, valid_D] = verify_mcs(full_cnap,mcs,modules{2}.V*rmap,modules{2}.v,modules{2}.c*rmap,modules{1}.V*rmap,modules{1}.v);
+    else % sGCP & SUCP
+        [valid_T, valid_D] = verify_mcs(full_cnap,mcs,modules{2}.V*rmap,modules{2}.v,[],modules{1}.V*rmap,modules{1}.v);
     end
     valid = ~valid_T & valid_D;
     if all(valid)
@@ -248,23 +258,8 @@ if isempty(succ)
     mcs = nan;
     text = 'no MCS found';
 else
-    text = ['Details of individual runs: ' newline '  valid/found/num_runs: ' num2str(sum(valid)) '/' num2str(sum(succ)) '/' num2str(num_iter) ...
-            ' | MCS sizes: ' strjoin(cellstr(num2str(mcs_size')),',') ' | times: ' strjoin(cellstr(num2str(comptime)),',')];
-end
-
-switch coupling
-    case 'weak growth-coupling'
-        comp_time_wg = comptime_succ;
-        min_MCS_wg   = num2str(size_smallest);
-        weakGC_text  = text;
-    case 'strong growth-coupling'
-        comp_time_sg = comptime_succ;
-        min_MCS_sg   = num2str(size_smallest);
-        strongGC_text = text;
-    case 'substrate uptake coupling'
-        comp_time_su = comptime_succ;
-        min_MCS_su   = num2str(size_smallest);
-        substUp_text = text;
+    text = ['av. mcs size: ' num2str(mean(mcs_size(succ))) ' | valid/found/num_runs: ' num2str(sum(valid)) '/' num2str(sum(succ)) '/' num2str(num_iter) ...
+            ' | ' strjoin(cellstr(num2str(mcs_size')),',') ' | times: ' strjoin(cellstr(num2str(comptime)),',')];
 end
 
 disp('========')
@@ -403,8 +398,13 @@ function [valid_T, valid_D] = verify_mcs(cnap,mcs,T,t,c,D,d)
             cnap_valid_opt.reacMin(logical(c)) = fv(logical(c));
             cnap_valid_opt.reacMax(logical(c)) = fv(logical(c));
         end
-		valid_T(i) = testRegionFeas(cnap_valid_opt,T,t,2);
-        valid_D(i) = testRegionFeas(cnap_valid,D,d,2);
+        if isempty(T)
+            valid_T(i) = 0;
+            valid_D(i) = testRegionFeas(cnap_valid_opt,D,d,2);
+        else
+            valid_T(i) = testRegionFeas(cnap_valid_opt,T,t,2);
+            valid_D(i) = testRegionFeas(cnap_valid,D,d,2);
+        end
     end
 end
 

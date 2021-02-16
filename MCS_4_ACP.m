@@ -173,6 +173,7 @@ disp('========')
 disp('Results:')
 reac_names = full_cnap.reacID;
 reac_names(full_cnap.rType ~= 'r',:) = reac_names(full_cnap.rType ~= 'r',[4:end '   ']);
+warning('off','MATLAB:hg:AutoSoftwareOpenGL');
 f = figure;
 p = plot_mcs_relationships(reac_names,mcs_sGCP,mcs_ACP,mcs_SUCP);
 warning('on','MATLAB:hg:AutoSoftwareOpenGL');

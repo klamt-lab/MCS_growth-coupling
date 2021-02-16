@@ -1,6 +1,7 @@
 % This script reproduces the results from Figure 4:
 % It computes all MCS for the weakly and strongly growth-coupled and 
 % substrate uptake production of ethanol with E. coli.
+% pGCP: production potential at max growth rate
 % wGCP: production at max growth rate
 % sGCP: prodution at all positive growth rates
 % SUCP: prodcution in all flux states
@@ -22,7 +23,7 @@
 atpm = true; % atpm = true  - forces a minimum ATP maintenance rate (as in the original iML1515 model)
              % atpm = false - lifts the ATP maintenance constraint
 maxSolutions = inf;
-coupling = {'weak growth-coupling' 'strong growth-coupling' 'substrate uptake coupling'};
+coupling = {'potential growth-coupling' 'weak growth-coupling' 'strong growth-coupling' 'substrate uptake coupling'};
 maxCost = 3;
 options.mcs_search_mode = 2;
 verbose = 1;
@@ -76,7 +77,10 @@ cnap = CNAsetGenericReactionData(cnap,find(strcmp(cellstr(cnap.reacID),'FRD2')),
 cnap = CNAsetGenericReactionData(cnap,find(strcmp(cellstr(cnap.reacID),'FRD3')),'geneProductAssociation','frd*');
 cnap = CNAsetGenericReactionData(cnap,find(strcmp(cellstr(cnap.reacID),'CYTBO3_4pp')),'geneProductAssociation','cyo*');
 cnap = CNAsetGenericReactionData(cnap,find(strcmp(cellstr(cnap.reacID),'THD2pp')),'geneProductAssociation','pnt*');
-cnap = CNAsetGenericReactionData(cnap,find(strcmp(cellstr(cnap.reacID),'PDH')),'geneProductAssociation','ace* and lpd');    
+cnap = CNAsetGenericReactionData(cnap,find(strcmp(cellstr(cnap.reacID),'PDH')),'geneProductAssociation','ace* and lpd');
+cnap = CNAsetGenericReactionData(cnap,find(strcmp(cellstr(cnap.reacID),'AKGDH')),'geneProductAssociation','sucAB and lpd');
+cnap = CNAsetGenericReactionData(cnap,find(strcmp(cellstr(cnap.reacID),'SUCOAS')),'geneProductAssociation','sucCD');
+cnap = CNAsetGenericReactionData(cnap,find(strcmp(cellstr(cnap.reacID),'SUCDi')),'geneProductAssociation','sdh*'); % sdhA,B,C,D
 [~,~,genes,gpr_rules] = CNAgenerateGPRrules(cnap);
 
 %% 2) Define MCS setup
@@ -90,18 +94,23 @@ rkoCost(strcmp(cellstr(cnap.reacID),'EX_o2_e')) = 1;
 product_rID   = 'EX_etoh_e';
 substrate_rID = 'EX_glc__D_e';
 biomass_rID   = 'BIOMASS_Ec_iML1515_core_75p37M';
-% Desired fluxes for all coupling cases: growth >= 0.05/h
-modules{1}.sense = 'desired';
-modules{1}.type  = 'lin_constraints';
-[modules{1}.V(1,:),modules{1}.v(1,:)] = genV([{biomass_rID} {'>='} 0.05 ],cnap);
-% Target fluxes for coupling cases:
 for coupling_i = coupling
-    modules{2} = struct;
+    clear('modules');
+    % Desired fluxes for all coupling cases: growth >= 0.05/h
+    modules{1}.sense = 'desired';
+    modules{1}.type  = 'lin_constraints';
+    [modules{1}.V(1,:),modules{1}.v(1,:)] = genV([{biomass_rID} {'>='} 0.05 ],cnap);
+
     disp(' ');
     disp('=============');
     disp(char(coupling_i));
     disp('=============');
     switch char(coupling_i)
+        case 'potential growth-coupling'
+            modules{1}.type  = 'bilev_w_constr';
+            % Desired flux states with maximal growth and positive ethanol production
+            [modules{1}.V(2,:),modules{1}.v(2,:)] = genV([{product_rID} {'>='} 0.01 ],cnap);
+            [modules{1}.c(1,:),~]                 = genV([{biomass_rID} {'>='} 0    ],cnap); % maximize biomass
         case 'weak growth-coupling'
             modules{2}.sense = 'target';
             modules{2}.type  = 'bilev_w_constr';
@@ -112,14 +121,13 @@ for coupling_i = coupling
         case 'strong growth-coupling'
             modules{2}.sense = 'target';
             modules{2}.type = 'lin_constraints';
-            % Target flux states with positive growth and no ethanol production
             [modules{2}.V(1,:),modules{2}.v(1,:)] = genV([{product_rID}   {'<='}  0     ],cnap);
             [modules{2}.V(2,:),modules{2}.v(2,:)] = genV([{biomass_rID}   {'>='}  0.001 ],cnap);
         case 'substrate uptake coupling'
             modules{2}.sense = 'target';
             modules{2}.type = 'lin_constraints';
-            % Target all flux states without ethanol production
             [modules{2}.V(1,:),modules{2}.v(1,:)] = genV([{product_rID}   {'<='}  0   ],cnap);
+            modules_su = modules;
         otherwise
             error(['Coupling mode ''' char(coupling_i) ''' not found.']);
     end
@@ -135,9 +143,11 @@ for coupling_i = coupling
     %% 4) Verify MCS
     disp('Verifying MCS');
     if ~isempty(mcs) % if mcs have been found
-        if isfield(modules{2},'c')
+        if isfield(modules{1},'c') % pGCP
+            [valid_T, valid_D] = verify_mcs(full_cnap,mcs,[],[],modules{1}.c*rmap,modules{1}.V*rmap,modules{1}.v);
+        elseif isfield(modules{2},'c') % wGCP
             [valid_T, valid_D] = verify_mcs(full_cnap,mcs,modules{2}.V*rmap,modules{2}.v,modules{2}.c*rmap,modules{1}.V*rmap,modules{1}.v);
-        else
+        else % sGCP & SUCP
             [valid_T, valid_D] = verify_mcs(full_cnap,mcs,modules{2}.V*rmap,modules{2}.v,[],modules{1}.V*rmap,modules{1}.v);
         end
         valid = ~valid_T & valid_D;
@@ -156,6 +166,10 @@ for coupling_i = coupling
         text = 'no MCS found';
     else
         switch char(coupling_i)
+        case 'potential growth-coupling'
+            comp_time_pGCP = toc;
+            mcs_pGCP   = mcs;
+            disp([num2str(size(mcs_pGCP,2))   ' MCS for potential growth-coupling (after '      num2str(comp_time_pGCP) ' s)']);
         case 'weak growth-coupling'
             comp_time_wGCP = toc;
             mcs_wGCP   = mcs;
@@ -177,8 +191,11 @@ disp('========')
 disp('Results:')
 reac_names = full_cnap.reacID;
 reac_names(full_cnap.rType ~= 'r',:) = reac_names(full_cnap.rType ~= 'r',[4:end '   ']);
-f = figure;
+warning('off','MATLAB:hg:AutoSoftwareOpenGL');
+f1 = figure;
 p = plot_mcs_relationships(reac_names,mcs_wGCP,mcs_sGCP,mcs_SUCP);
+f2 = figure;
+p = plot_mcs_relationships(reac_names,mcs_pGCP,mcs_wGCP,mcs_sGCP);
 warning('on','MATLAB:hg:AutoSoftwareOpenGL');
 disp('Finished.');
 
@@ -287,7 +304,7 @@ end
 
 function [valid_T, valid_D] = verify_mcs(cnap,mcs,T,t,c,D,d)
     if license('test','Distrib_Computing_Toolbox') && isempty(getCurrentTask()) && ...
-           (~isempty(ver('parallel'))  || ~isempty(ver('distcomp'))) && isempty(gcp('nocreate')) %#ok<DCRENAME>
+           (~isempty(ver('parallel'))  || ~isempty(ver('distcomp'))) && ~isempty(gcp('nocreate')) %#ok<DCRENAME>
         numworkers = getfield(gcp('nocreate'),'NumWorkers');
     else
         numworkers = 0;
@@ -306,7 +323,12 @@ function [valid_T, valid_D] = verify_mcs(cnap,mcs,T,t,c,D,d)
             cnap_valid_opt.reacMin(logical(c)) = fv(logical(c));
             cnap_valid_opt.reacMax(logical(c)) = fv(logical(c));
         end
-		valid_T(i) = testRegionFeas(cnap_valid_opt,T,t,2);
-        valid_D(i) = testRegionFeas(cnap_valid,D,d,2);
+        if isempty(T)
+            valid_T(i) = 0;
+            valid_D(i) = testRegionFeas(cnap_valid_opt,D,d,2);
+        else
+            valid_T(i) = testRegionFeas(cnap_valid_opt,T,t,2);
+            valid_D(i) = testRegionFeas(cnap_valid,D,d,2);
+        end
     end
 end

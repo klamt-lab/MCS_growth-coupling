@@ -38,9 +38,7 @@ try
     save(filename,'mcs','comptime','status');
 catch err
     warning('off','backtrace')
-    if cnan.math_prog_type == 0
-      warning( getReport( err, 'extended', 'hyperlinks', 'on' ) ); % getReport not yet implemented in octave
-    end
+    warning( getReport( err, 'extended', 'hyperlinks', 'on' ) ); % getReport not yet implemented in octave
     warning('Something went wrong.');
     warning('on','backtrace')
 end
