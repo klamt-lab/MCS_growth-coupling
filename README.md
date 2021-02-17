@@ -11,9 +11,11 @@ Added Features (CellNetAnalyzer):
 
 1.  Definition of optimality constraints for describing desired and undesired behavior
     (in addition to static linear constraints of the form **T**·**r** ≤ **t** and **D**·**r** ≤ **d**).
-    Such constraints can be used to define MCS setups for weakly growth-coupled product synthesis.
-    For this purpose one sets growth rate optimality to target/delete all flux states with maximum growth 
-    and without product synthesis, for the latter, the static constraint r_P = 0 is sufficient.
+    Such constraints can be used to define MCS setups for potentially and weakly growth-coupled product synthesis.
+    For potentially growth-coupled production, one defines desired flux states such that growth rate optimality is demanded
+    together minima for the attainable growth rate and product synthesis rate. For weakly growth-coupled product synthesis, 
+    one uses a target system in which growth rate optimality is selected together with the static constraint r_P = 0. 
+    MCS will seek to eliminate where maximum growth and zero production coincide.
 
 Software Requirements:
 ----------------------
@@ -40,24 +42,24 @@ Script Files:
 
 1. **MCS_1_coupling_degrees.m**
 
-   Computes **exhaustively all minimal cut sets up to three gene knockouts for the weakly and strongly growth-coupled and substrate-uptake coupled 
+   Computes **exhaustively all minimal cut sets up to three gene knockouts for the potentially, weakly and strongly growth-coupled and substrate-uptake coupled 
    production of ethanol** with *E. coli*. A subnetwork/core network (ca. 600 reactions) of the iML1515 is used to shorten the computation runtime.
    Finally, the relationship between the MCS sets of the different coupling types is plotted. The user can set/unset the flag to de-/activate the 
    minimum ATP maintenance demand.
 
 2. **MCS_2_smallest.m** 
 
-   Computes **the smallest minimal cut set** for the weakly and strongly growth-coupled and substrate-uptake coupled synthesis of different products
+   Computes **the smallest minimal cut set** for the potentially, weakly and strongly growth-coupled and substrate-uptake coupled synthesis of different products
    with *E. coli*. The genome-scale model iML1515 is used. For heterologous products, the pathways are added automatically.
    As the runtime strongly depends on the random seed used in the MCS computation, multiple computations are run with a time
    limit. To avoid memory problems, the computation is run in a seperate MATLAB instance. By default, the script runs with the following
-   settings: (1) ethanol production (2) weak growth-coupled production (3) 12 iterations (4) 2 hours per computation (5) run each computation
+   settings: (1) ethanol production (2) weak growth-coupled production (3) 6 iterations (4) 4 hours per computation (5) run each computation
    in a new process each (6) maximum of 60 knockouts (7) return after finding 1 solution. The user can change these settings to compute
    MCS for different products or coupling strengths.
 
 3. **MCS_3_any.m** 
 
-   Computes **a random minimal cut set** for the weakly and strongly growth-coupled and substrate-uptake coupled synthesis of different products
+   Computes **a random minimal cut set** for the potentially, weakly and strongly growth-coupled and substrate-uptake coupled synthesis of different products
    with *E. coli*. The genome-scale model iML1515 is used. For heterologous products, the pathways are added automatically.
    As the runtime strongly depends on the random seed used in the MCS computation, multiple computations are run with a time
    limit. To avoid memory problems, the computation is run in a seperate MATLAB instance. By default, the script runs with the following
