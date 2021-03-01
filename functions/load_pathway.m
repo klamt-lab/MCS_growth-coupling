@@ -82,51 +82,7 @@ function [prod_id,species,reactions] = load_pathway(product)
 			reactions(7) = struct('reac_id','IStpp','equation','1 is_c = 1 is_p','lb',-1000,'ub',1000,'fbc_geneProductAssociation','');
 			reactions(8) = struct('reac_id','IStex','equation','1 is_p = 1 is_e','lb',0,'ub',1000,'fbc_geneProductAssociation','');
 			reactions(9) = struct('reac_id','EX_is_e','equation','1 is_e =','lb',0,'ub',1000,'fbc_geneProductAssociation','');
-        case 10 % octyl acetate
-			prod_id      = 'EX_ocac_e';
-			species(1)   = struct('spec_id','octal_c','spec_name','octanal','fbc_chemicalFormula','C8H16O','fbc_charge',0);
-			species(2)   = struct('spec_id','octoh_c','spec_name','octanol','fbc_chemicalFormula','C8H18O','fbc_charge',0);
-			species(3)   = struct('spec_id','ocac_c','spec_name','octyl acetate','fbc_chemicalFormula','C10H20O2','fbc_charge',0);
-			species(4)   = struct('spec_id','ocac_p','spec_name','octyl acetate (periplasm)','fbc_chemicalFormula','C10H20O2','fbc_charge',0);
-			species(5)   = struct('spec_id','ocac_e','spec_name','octyl acetate (extracellular)','fbc_chemicalFormula','C10H20O2','fbc_charge',0);
-			reactions(1) = struct('reac_id','CAR','equation','1 octa_c + nadph_c + h_c + atp_c = octal_c + nadp_c + amp_c + ppi_c','lb',0,'ub',1000,'fbc_geneProductAssociation','carholo');
-			reactions(2) = struct('reac_id','AHR','equation','1 octal_c + nadph_c + h_c = 1 octoh_c + nadp_c','lb',0,'ub',1000,'fbc_geneProductAssociation','oahr');
-			reactions(3) = struct('reac_id','AAT','equation','1 octoh_c + 1 accoa_c = 1 ocac_c + 1 coa_c','lb',0,'ub',1000,'fbc_geneProductAssociation','scatf1');
-			reactions(4) = struct('reac_id','OCACtpp','equation','1 ocac_c = 1 ocac_p','lb',0,'ub',1000,'fbc_geneProductAssociation','');
-			reactions(5) = struct('reac_id','OCACtex','equation','1 ocac_p = 1 ocac_e','lb',0,'ub',1000,'fbc_geneProductAssociation','');
-			reactions(6) = struct('reac_id','EX_ocac_e','equation','1 ocac_e =','lb',0,'ub',1000,'fbc_geneProductAssociation','');
-			reactions(7) = struct('reac_id','XPK','equation','1 xu5p__D_c + 1 pi_c = 1 actp_c + 1 g3p_c + 1 h2o_c','lb',0,'ub',1000,'fbc_geneProductAssociation','fxpk');
-			reactions(8) = struct('reac_id','FPK','equation','1 f6p_c + 1 pi_c = 1 actp_c + 1 e4p_c + 1 h2o_c','lb',0,'ub',1000,'fbc_geneProductAssociation','fxpk');
-        case 11 % butane
-			prod_id      = 'EX_butane_e';
-            species(1)   = struct('spec_id','ppoh_c','spec_name','','fbc_chemicalFormula','C3H8O1','fbc_charge',0);
-			species(2)   = struct('spec_id','val_c','spec_name','','fbc_chemicalFormula','C5H9O2','fbc_charge',-1);
-			species(3)   = struct('spec_id','ptcoa_c','spec_name','','fbc_chemicalFormula','C26H40N7O17P3S','fbc_charge',-4);
-			species(4)   = struct('spec_id','cis23dhbtcoa_c','spec_name','','fbc_chemicalFormula','C25H36N7O17P3S','fbc_charge',-4);
-			species(5)   = struct('spec_id','cis2mctcoa_c','spec_name','','fbc_chemicalFormula','C26H38N7O17P3S','fbc_charge',-4);
-			species(6)   = struct('spec_id','3hbcoa__R_c','spec_name','','fbc_chemicalFormula','C25H38N7O18P3S','fbc_charge',-4);
-			species(7)   = struct('spec_id','3hptcoa_c','spec_name','','fbc_chemicalFormula','C26H40N7O18P3S','fbc_charge',-4);
-			species(8)   = struct('spec_id','3oxptcoa_c','spec_name','','fbc_chemicalFormula','C26H38N7O18P3S','fbc_charge',-4);
-            species(9)   = struct('spec_id','ptal_c','spec_name','','fbc_chemicalFormula','C5H10O','fbc_charge',0);
-            species(10)   = struct('spec_id','butane_c','spec_name','','fbc_chemicalFormula','C4H10','fbc_charge',0);
-			species(11)   = struct('spec_id','butane_p','spec_name','','fbc_chemicalFormula','C4H10','fbc_charge',0);
-			species(12)   = struct('spec_id','butane_e','spec_name','','fbc_chemicalFormula','C4H10','fbc_charge',0);
-			reactions(1) = struct('reac_id','ALCD3ir','equation','1 h_c + 1 ppal_c + 1 nadh_c = 1 nad_c + 1 ppoh_c','lb',0,'ub',0,'fbc_geneProductAssociation','E2348C_RS11505');
-			reactions(2) = struct('reac_id','MMSAD2','equation','1 nad_c + 1 ppal_c + 1 coa_c = 1 h_c + 1 ppcoa_c + 1 nadh_c','lb',0,'ub',0,'fbc_geneProductAssociation','E2348C_RS11500');
-			reactions(3) = struct('reac_id','ADO50','equation','1 h2o_c + 1 ptal_c = 1 h_c + 1 for_c + 1 butane_c','lb',-1000,'ub',1000,'fbc_geneProductAssociation','ado');
-			reactions(4) = struct('reac_id','CARNi5','equation','1 h_c + 1 atp_c + 1 nadph_c + 1 val_c = 1 ppi_c + 1 nadp_c + 1 amp_c + 1 ptal_c','lb',-1000,'ub',1000,'fbc_geneProductAssociation','car');
-			reactions(5) = struct('reac_id','THSTRS5','equation','1 h2o_c + 1 ptcoa_c = 1 h_c + 1 coa_c + 1 val_c','lb',-1000,'ub',1000,'fbc_geneProductAssociation','tesB');
-			reactions(6) = struct('reac_id','TERTD4','equation','1 h_c + 1 nadh_c + 1 cis23dhbtcoa_c = 1 nad_c + 1 btcoa_c','lb',-1000,'ub',1000,'fbc_geneProductAssociation','ter');
-			reactions(7) = struct('reac_id','TERTD5','equation','1 h_c + 1 nadh_c + 1 cis2mctcoa_c = 1 nad_c + 1 ptcoa_c','lb',-1000,'ub',1000,'fbc_geneProductAssociation','ter');
-			reactions(8) = struct('reac_id','PHAJ4B4','equation','1 3hbcoa__R_c = 1 h2o_c + 1 cis23dhbtcoa_c','lb',-1000,'ub',1000,'fbc_geneProductAssociation','phaJ4b');
-			reactions(9) = struct('reac_id','PHAJ4B5','equation','1 3hptcoa_c = 1 h2o_c + 1 cis2mctcoa_c','lb',-1000,'ub',1000,'fbc_geneProductAssociation','phaJ4b');
-			reactions(10) = struct('reac_id','PHAB5','equation','1 h_c + 1 nadph_c + 1 3oxptcoa_c = 1 nadp_c + 1 3hptcoa_c','lb',-1000,'ub',1000,'fbc_geneProductAssociation','phaB');
-			reactions(11) = struct('reac_id','PHAB4','equation','1 h_c + 1 aacoa_c + 1 nadph_c = 1 nadp_c + 1 3hbcoa__R_c','lb',-1000,'ub',1000,'fbc_geneProductAssociation','phaB');
-			reactions(12) = struct('reac_id','BTKB5','equation','1 accoa_c + 1 ppcoa_c = 1 coa_c + 1 3oxptcoa_c','lb',-1000,'ub',1000,'fbc_geneProductAssociation','bktB');
-			reactions(13) = struct('reac_id','BUTANEtp','equation','1 butane_c = 1 butane_p','lb',0,'ub',1000,'fbc_geneProductAssociation','');
-			reactions(14) = struct('reac_id','BUTANEtex','equation','1 butane_p = 1 butane_e','lb',0,'ub',1000,'fbc_geneProductAssociation','');
-			reactions(15) = struct('reac_id','EX_butane_e','equation','1 butane_e','lb',0,'ub',1000,'fbc_geneProductAssociation','');
-        case 12 % methacrylic acid
+        case 10 % methacrylic acid
 			prod_id      = 'EX_2mp2e_e';
 			species(1)   = struct('spec_id','2mppal_c','spec_name','2-Methylpropanal','fbc_chemicalFormula','C4H8O','fbc_charge',0);
 			species(2)   = struct('spec_id','2mpp_c','spec_name','2-Methylpropanoate','fbc_chemicalFormula','C4H7O2','fbc_charge',-1);
@@ -144,7 +100,7 @@ function [prod_id,species,reactions] = load_pathway(product)
 			reactions(7) = struct('reac_id','2MP2Etpp','equation','1 2mp2e_c = 1 2mp2e_p','lb',-1000,'ub',1000,'fbc_geneProductAssociation','');
 			reactions(8) = struct('reac_id','2MP2Etex','equation','1 2mp2e_p = 1 2mp2e_e','lb',0,'ub',1000,'fbc_geneProductAssociation','');
 			reactions(9) = struct('reac_id','EX_2mp2e_e','equation','1 2mp2e_e =','lb',0,'ub',1000,'fbc_geneProductAssociation','');
-        case 13 % resveratrol
+        case 11 % resveratrol
 			prod_id      = 'EX_revtl_e';
 			species(1)   = struct('spec_id','cou_c','spec_name','4-coumarate','fbc_chemicalFormula','C9H7O3','fbc_charge',-1);
 			species(2)   = struct('spec_id','coucoa_c','spec_name','4-coumaroyl-CoA','fbc_chemicalFormula','C30H38N7O18P3S','fbc_charge',-4);
@@ -159,7 +115,7 @@ function [prod_id,species,reactions] = load_pathway(product)
 			reactions(6) = struct('reac_id','EX_revtl_e','equation','1 revtl_e =','lb',0,'ub',1000,'fbc_geneProductAssociation','');
 			reactions(7) = struct('reac_id','XPK','equation','1 xu5p__D_c + 1 pi_c = 1 actp_c + 1 g3p_c + 1 h2o_c','lb',0,'ub',1000,'fbc_geneProductAssociation','fxpk');
 			reactions(8) = struct('reac_id','FPK','equation','1 f6p_c + 1 pi_c = 1 actp_c + 1 e4p_c + 1 h2o_c','lb',0,'ub',1000,'fbc_geneProductAssociation','fxpk');
-        case 14 % bisabolene
+        case 12 % bisabolene
 			prod_id      = 'EX_bsb_e';
 			species(1)   = struct('spec_id','hmgcoa_c','spec_name','3-Hydroxy-3-methyl-glutaryl-CoA','fbc_chemicalFormula','C27H39N7O20P3S','fbc_charge',-5);
 			species(2)   = struct('spec_id','mev_c','spec_name','(3R)-3,5-Dihydroxy-3-methylpentanoate','fbc_chemicalFormula','C6H11O4','fbc_charge',-1);
@@ -180,21 +136,6 @@ function [prod_id,species,reactions] = load_pathway(product)
 			reactions(10) = struct('reac_id','EX_bsb_e','equation','1 bsb_e =','lb',0,'ub',1000,'fbc_geneProductAssociation','');
 			reactions(11) = struct('reac_id','XPK','equation','1 xu5p__D_c + 1 pi_c = 1 actp_c + 1 g3p_c + 1 h2o_c','lb',0,'ub',1000,'fbc_geneProductAssociation','fxpk');
 			reactions(12) = struct('reac_id','FPK','equation','1 f6p_c + 1 pi_c = 1 actp_c + 1 e4p_c + 1 h2o_c','lb',0,'ub',1000,'fbc_geneProductAssociation','fxpk');
-        case 15 % 4-hydroxycoumarin
-			prod_id      = 'EX_4hc_e';
-			species(1)   = struct('spec_id','salc_c','spec_name','salicylate','fbc_chemicalFormula','C7H5O3','fbc_charge',-1);
-			species(2)   = struct('spec_id','salccoa_c','spec_name','salicyl-CoA, 2-Hydroxybenzoyl-CoA','fbc_chemicalFormula','C28H36N7O18P3S','fbc_charge',-4);
-			species(3)   = struct('spec_id','4hc_c','spec_name','4-hydroxycoumarin','fbc_chemicalFormula','C9H6O3','fbc_charge',0);
-			species(4)   = struct('spec_id','4hc_p','spec_name','4-hydroxycoumarin (periplasm)','fbc_chemicalFormula','C9H6O3','fbc_charge',0);
-			species(5)   = struct('spec_id','4hc_e','spec_name','4-hydroxycoumarin (extracellular)','fbc_chemicalFormula','C9H6O3','fbc_charge',0);
-			reactions(1) = struct('reac_id','IPL','equation','ichor_c = pyr_c + salc_c','lb',0,'ub',1000,'fbc_geneProductAssociation','pchB');
-			reactions(2) = struct('reac_id','SCL','equation','salc_c + coa_c + atp_c = salccoa_c + amp_c + ppi_c','lb',0,'ub',1000,'fbc_geneProductAssociation','sdgA');
-			reactions(3) = struct('reac_id','BIS','equation','salccoa_c + h_c + malcoa_c = 4hc_c + co2_c + 2 coa_c','lb',0,'ub',1000,'fbc_geneProductAssociation','pqsD');
-			reactions(4) = struct('reac_id','4HCtpp','equation','1 4hc_c = 1 4hc_p','lb',0,'ub',1000,'fbc_geneProductAssociation','');
-			reactions(5) = struct('reac_id','4HCtex','equation','1 4hc_p = 1 4hc_e','lb',0,'ub',1000,'fbc_geneProductAssociation','');
-			reactions(6) = struct('reac_id','EX_4hc_e','equation','1 4hc_e =','lb',0,'ub',1000,'fbc_geneProductAssociation','');
-			reactions(7) = struct('reac_id','XPK','equation','1 xu5p__D_c + 1 pi_c = 1 actp_c + 1 g3p_c + 1 h2o_c','lb',0,'ub',1000,'fbc_geneProductAssociation','fxpk');
-			reactions(8) = struct('reac_id','FPK','equation','1 f6p_c + 1 pi_c = 1 actp_c + 1 e4p_c + 1 h2o_c','lb',0,'ub',1000,'fbc_geneProductAssociation','fxpk');
     end
 end
 
