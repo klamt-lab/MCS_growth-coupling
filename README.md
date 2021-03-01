@@ -49,7 +49,7 @@ Script Files:
 
 2. **MCS_2_smallest.m** 
 
-   Computes **the smallest minimal cut set** for the potentially, weakly and strongly growth-coupled and substrate-uptake coupled synthesis of different products
+   Computes **the smallest minimal cut set** for the potentially, weakly and strongly growth-coupled and substrate-uptake coupled synthesis of 12 different products
    with *E. coli*. The genome-scale model iML1515 is used. For heterologous products, the pathways are added automatically.
    As the runtime strongly depends on the random seed used in the MCS computation, multiple computations are run with a time
    limit. To avoid memory problems, the computation is run in a seperate MATLAB instance. By default, the script runs with the following
@@ -59,7 +59,7 @@ Script Files:
 
 3. **MCS_3_any.m** 
 
-   Computes **a random minimal cut set** for the potentially, weakly and strongly growth-coupled and substrate-uptake coupled synthesis of different products
+   Computes **a random minimal cut set** for the potentially, weakly and strongly growth-coupled and substrate-uptake coupled synthesis of 12 different products
    with *E. coli*. The genome-scale model iML1515 is used. For heterologous products, the pathways are added automatically.
    As the runtime strongly depends on the random seed used in the MCS computation, multiple computations are run with a time
    limit. To avoid memory problems, the computation is run in a seperate MATLAB instance. By default, the script runs with the following
