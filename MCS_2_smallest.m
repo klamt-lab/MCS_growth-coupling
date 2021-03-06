@@ -32,20 +32,17 @@ coupling = 'weak growth-coupling';
 
 % select product
 %  1: ethanol
-%  2: isobutanol
-%  3: 1,4-BDO
-%  4: 2,3-BDO
-%  5: itaconic acid
-%  6: tryptophane
-%  7: lysine
-%  8: glutamate
-%  9: isoprene
-% 10: octyl acetate
-% 11: butane
-% 12: methacrylic acid
-% 13: resveratrol
-% 14: bisabolene
-% 15: 4-hydroxycoumarin
+%  2: lysine
+%  3: glutamate
+%  4: isobutanol
+%  5: 1,4-BDO
+%  6: 2,3-BDO
+%  7: itaconic acid
+%  8: isoprene
+%  9: butane
+% 10: methacrylic acid
+% 11: resveratrol
+% 12: bisabolene
 product = 1;
 
 % select number and time limit for computations
