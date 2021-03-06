@@ -40,9 +40,12 @@ coupling = 'weak growth-coupling';
 %  7: lysine
 %  8: glutamate
 %  9: isoprene
-% 10: methacrylic acid
-% 11: resveratrol
-% 12: bisabolene
+% 10: octyl acetate
+% 11: butane
+% 12: methacrylic acid
+% 13: resveratrol
+% 14: bisabolene
+% 15: 4-hydroxycoumarin
 product = 1;
 
 % select number and time limit for computations
