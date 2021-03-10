@@ -195,8 +195,12 @@ reac_names(full_cnap.rType ~= 'r',:) = reac_names(full_cnap.rType ~= 'r',[4:end 
 warning('off','MATLAB:hg:AutoSoftwareOpenGL');
 f1 = figure;
 p = plot_mcs_relationships(reac_names,mcs_wGCP,mcs_sGCP,mcs_SUCP);
+text('String','wGCP-MCS     vs     sGCP-MCS     vs     SUCP-MCS','Units','normalized',...
+    'Position',[0, 1], 'FontUnits','normalized','FontSize',0.053);
 f2 = figure;
 p = plot_mcs_relationships(reac_names,mcs_pGCP,mcs_wGCP,mcs_sGCP);
+text('String','pGCP-MCS     vs     wGCP-MCS     vs     sGCP-MCS','Units','normalized',...
+    'Position',[0, 1], 'FontUnits','normalized','FontSize',0.053);
 warning('on','MATLAB:hg:AutoSoftwareOpenGL');
 disp('Finished.');
 
