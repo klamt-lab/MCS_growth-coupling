@@ -61,7 +61,18 @@ verbose = 1;
 %% 0) Starting CNA and Parallel pool (for faster FVA), defining computation settings
 addpath(fullfile(fileparts(mfilename('fullpath')),'functions'));
 if ~exist('cnan','var')
-    startcna(1)
+    try
+        startcna(1)
+    catch
+        error('CellNetAnalyzer could not be started. Make sure that it is installed and added to the MATLAB path.');
+    end
+end
+if ismember(3,find(LP_solver_availability(true)))
+    options.milp_solver = 'cplex';
+elseif ismember(4,find(LP_solver_availability(true)))
+    options.milp_solver = 'gurobi';
+else
+    error('This script requires either CPLEX or Gurobi. Make sure that at least one of these two is set up with CNA.');
 end
 
 % if availabe, use parpool
@@ -392,16 +403,16 @@ function [valid_T, valid_D] = verify_mcs(cnap,mcs,T,t,c,D,d)
         cnap_valid_opt = cnap_valid;
         if ~isempty(c)
             cnap_valid.objFunc = c';
-            fv = CNAoptimizeFlux(cnap_valid,[], [], 2, -1);
+            fv = CNAoptimizeFlux(cnap_valid,[], [], 0, -1);
             cnap_valid_opt.reacMin(logical(c)) = fv(logical(c));
             cnap_valid_opt.reacMax(logical(c)) = fv(logical(c));
         end
         if isempty(T)
             valid_T(i) = 0;
-            valid_D(i) = testRegionFeas(cnap_valid_opt,D,d,2);
+            valid_D(i) = testRegionFeas(cnap_valid_opt,D,d);
         else
-            valid_T(i) = testRegionFeas(cnap_valid_opt,T,t,2);
-            valid_D(i) = testRegionFeas(cnap_valid,D,d,2);
+            valid_T(i) = testRegionFeas(cnap_valid_opt,T,t);
+            valid_D(i) = testRegionFeas(cnap_valid,D,d);
         end
     end
 end
