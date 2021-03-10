@@ -26,6 +26,7 @@ options.mcs_search_mode = 2;
 verbose = 1;
 
 %% 0) Starting CNA and Parallel pool (for faster FVA), defining computation settings
+addpath(fileparts(mfilename('fullpath')),'functions');
 if ~exist('cnan','var')
     startcna(1)
 end
