@@ -26,7 +26,7 @@ options.mcs_search_mode = 2;
 verbose = 1;
 
 %% 0) Starting CNA and Parallel pool (for faster FVA), defining computation settings
-addpath(fileparts(mfilename('fullpath')),'functions');
+addpath(fullfile(fileparts(mfilename('fullpath')),'functions'));
 if ~exist('cnan','var')
     startcna(1)
 end
@@ -89,6 +89,7 @@ ATPM_rID      = 'ATPM';
 substrate_rID = 'EX_glc__D_e';
 biomass_rID   = 'BIOMASS_Ec_iML1515_core_75p37M';
 % Desired fluxes for all coupling cases: growth >= 0.05/h
+clear('modules');
 modules{1}.sense = 'desired';
 modules{1}.type  = 'lin_constraints';
 [modules{1}.V(1,:),modules{1}.v(1,:)] = genV([{biomass_rID} {'>='} 0.05 ],cnap);

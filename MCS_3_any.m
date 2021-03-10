@@ -59,7 +59,7 @@ maxCost = 60;
 verbose = 1;
 
 %% 0) Starting CNA and Parallel pool (for faster FVA), defining computation settings
-addpath(fileparts(mfilename('fullpath')),'functions');
+addpath(fullfile(fileparts(mfilename('fullpath')),'functions'));
 if ~exist('cnan','var')
     startcna(1)
 end
