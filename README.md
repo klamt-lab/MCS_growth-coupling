@@ -1,10 +1,17 @@
-# MCS growth-coupling
+# Systematizing different notions of growth-coupled product synthesis and a single framework for computing corresponding strain designs (supplementary code)
 
-Computing gene knockout strategies (MCS) for different degrees of growth-coupled production
+Scripts and functions for computing gene knockout strategies (MCS) for different degrees of growth-coupled production
+
+Philipp Schneider, Radhakrishnan Mahadevan, Steffen Klamt
 
 2021/03/16
 
-Philipp Schneider, Radhakrishnan Mahadevan, Steffen Klamt
+corresponding author: klamt@mpi-magdeburg.mpg.de
+
+
+[Download supplementary code](https://github.com/klamt-Lab/MCS_growth-coupling/releases)
+
+[Download CNA](https://www2.mpi-magdeburg.mpg.de/projects/cna/download.html)
 
 Added Features (CellNetAnalyzer):
 ---------------
@@ -25,14 +32,14 @@ Software Requirements:
 2.  IBM ILOG® CPLEX® 12.7, 12.8, 12.9 or 12.10 (Make sure to use compatible CPLEX® and MATLAB® versions. Version 12.10 is recommended. 
     CPLEX® 20.1 DOES NOT WORK PROVIDE A MATLAB API AND CANNOT BE USED HERE)
 
-3.  CellNetAnalyzer2021.1 or later (https://www2.mpi-magdeburg.mpg.de/projects/cna/download.html)
+3.  [CellNetAnalyzer](https://www2.mpi-magdeburg.mpg.de/projects/cna/download.html)2021.1 or later 
 
 4.  Set up *CellNetAnalyzer* to access the CPLEX-Matlab-API (as described by *CellNetAnalyzer* manual)
     
 Getting Started:
 ----------------------
-1. Download this project to your computer (see release page https://github.com/klamt-Lab/MCS_growth-coupling/releases) and extract all files.
-2. Download the *E. coli* model iML1515 from here http://bigg.ucsd.edu/static/models/iML1515.mat. Place it in the project folder.
+1. Download this project to your computer (see [release page](https://github.com/klamt-Lab/MCS_growth-coupling/releases)) and extract all files.
+2. Download the *E. coli* model iML1515 from the [Bigg-database](http://bigg.ucsd.edu/static/models/iML1515.mat). Place it in the project folder.
 3. Start MATLAB.
 4. Add the main directory of your installation of the *CellNetAnalyzer* toolbox to your MATLAB path.
 5. Add the project folder and the subdirectory 'functions' to your MATLAB path.
@@ -100,8 +107,8 @@ Model files:
 
 12. **iML1515geneNames.mat** - contains a map of gene names and b-numbers. This helps to generate a user friendly output.
 
-13. **iML1515.mat** - **Required for computation, but not provided in this repository. Please download from **
-                        http://bigg.ucsd.edu/static/models/iML1515.mat
+13. **iML1515.mat** - **Required for computation, but not provided in this repository. Please download from the **
+                        [Bigg-database](http://bigg.ucsd.edu/static/models/iML1515.mat)
 
 
 Relevant new (API) functions included in the most recent release (2021.1) of the *CellNetAnalyzer* toolbox :
