@@ -24,7 +24,7 @@ Added Features (CellNetAnalyzer):
     For potentially growth-coupled production, one defines the desired flux states to be growth-optimal and compliant with
     minima for the attainable growth rate and product synthesis rate. For weakly growth-coupled product synthesis, 
     one uses a target system in which growth-optimality is combined with the static constraint r_P = 0. 
-    MCS will seek to eliminate where maximum growth and zero production coincide.
+    MCS will seek to eliminate flux states in which maximum growth and zero production coincide.
 
 Software Requirements:
 ----------------------
