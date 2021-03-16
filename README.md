@@ -11,7 +11,7 @@ Philipp Schneider, Radhakrishnan Mahadevan, Steffen Klamt
 corresponding author: klamt@mpi-magdeburg.mpg.de
 
 
-[Download supplementary code](https://github.com/klamt-Lab/MCS_growth-coupling/releases)
+[Download code](https://github.com/klamt-Lab/MCS_growth-coupling/releases)
 
 [Download CNA](https://www2.mpi-magdeburg.mpg.de/projects/cna/download.html)
 
