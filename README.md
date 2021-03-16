@@ -1,6 +1,8 @@
-# Systematizing different notions of growth-coupled product synthesis and a single framework for computing corresponding strain designs (supplementary code)
+# Scripts and functions for computing gene knockout strategies (MCS) for different degrees of growth-coupled production
 
-Scripts and functions for computing gene knockout strategies (MCS) for different degrees of growth-coupled production
+Supplemetary code for:
+
+Systematizing different notions of growth-coupled product synthesis and a single framework for computing corresponding strain designs
 
 Philipp Schneider, Radhakrishnan Mahadevan, Steffen Klamt
 
