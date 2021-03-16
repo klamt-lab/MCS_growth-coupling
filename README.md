@@ -109,7 +109,7 @@ Model files:
 
 12. **iML1515geneNames.mat** - contains a map of gene names and b-numbers. This helps to generate a user friendly output.
 
-13. **iML1515.mat** - **Required for computation, but not provided in this repository. Please download from the **
+13. **iML1515.mat** - **Required for computation, but not provided in this repository. Please download from the**
                         [Bigg-database](http://bigg.ucsd.edu/static/models/iML1515.mat)
 
 
