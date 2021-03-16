@@ -13,9 +13,9 @@ corresponding author: klamt@mpi-magdeburg.mpg.de
 
 [Download code](https://github.com/klamt-Lab/MCS_growth-coupling/releases)
 
-[Download latest CNA](https://www2.mpi-magdeburg.mpg.de/projects/cna/download.html)
+[Download latest *CellNetAnalyzer*](https://www2.mpi-magdeburg.mpg.de/projects/cna/download.html)
 
-Added Features (CellNetAnalyzer):
+Added Features (*CellNetAnalyzer*):
 ---------------
 
 1.  Definition of optimality constraints (*r <sub>i</sub> = r <sub>i,max</sub>*) for describing desired and undesired behavior
@@ -34,7 +34,7 @@ Software Requirements:
 2.  IBM ILOG® CPLEX® 12.7, 12.8, 12.9 or 12.10 (Make sure to use compatible CPLEX® and MATLAB® versions. Version 12.10 is recommended. 
     CPLEX® 20.1 DOES NOT WORK PROVIDE A MATLAB API AND CANNOT BE USED HERE)
 
-3.  [CellNetAnalyzer](https://www2.mpi-magdeburg.mpg.de/projects/cna/download.html)2021.1 or later 
+3.  [*CellNetAnalyzer*](https://www2.mpi-magdeburg.mpg.de/projects/cna/download.html) 2021.1 or later 
 
 4.  Set up *CellNetAnalyzer* to access the CPLEX-Matlab-API (as described by *CellNetAnalyzer* manual)
     
