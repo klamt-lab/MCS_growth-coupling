@@ -19,7 +19,7 @@ Added Features (CellNetAnalyzer):
 ---------------
 
 1.  Definition of optimality constraints for describing desired and undesired behavior
-    (in addition to static linear constraints of the form **T**·**r** ≤ **t** and **D**·**r** ≤ **d**).
+    (in addition to static linear constraints of the form **T** **r** ≤ **t** and **D** **r** ≤ **d**).
     Such constraints can be used to define MCS setups for potentially and weakly growth-coupled product synthesis.
     For potentially growth-coupled production, one defines the desired flux states to be growth-optimal and compliant with
     minima for the attainable growth rate and product synthesis rate. For weakly growth-coupled product synthesis, 
