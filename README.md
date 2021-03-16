@@ -2,7 +2,7 @@
 
 Computing gene knockout strategies (MCS) for different degrees of growth-coupled production
 
-2021/02/11
+2021/03/16
 
 Philipp Schneider, Radhakrishnan Mahadevan, Steffen Klamt
 
@@ -25,7 +25,7 @@ Software Requirements:
 2.  IBM ILOG® CPLEX® 12.7, 12.8, 12.9 or 12.10 (Make sure to use compatible CPLEX® and MATLAB® versions. Version 12.10 is recommended. 
     CPLEX® 20.1 DOES NOT WORK PROVIDE A MATLAB API AND CANNOT BE USED HERE)
 
-3.  CellNetAnalyzer2021.1 or later
+3.  CellNetAnalyzer2021.1 or later (https://www2.mpi-magdeburg.mpg.de/projects/cna/download.html)
 
 4.  Set up *CellNetAnalyzer* to access the CPLEX-Matlab-API (as described by *CellNetAnalyzer* manual)
     
