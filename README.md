@@ -1,4 +1,4 @@
-# Scripts and functions for computing gene knockout strategies (MCS) for different degrees of growth-coupled production
+# Computing gene knockout strategies (MCS) for different degrees of growth-coupled production
 
 Supplemetary code for:
 
