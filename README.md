@@ -83,7 +83,7 @@ Script Files:
    The minimum ATP maintenace demand from the original *iML1515* model is omitted. Finally, the relationships between the MCS sets of the different 
    coupling types are plotted.
 
-Other functions required for the scripts above:
+Auxiliary functions:
 -----------------------------------------------
 
 5. functions/**load_pathway.m** 
