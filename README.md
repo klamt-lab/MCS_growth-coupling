@@ -13,7 +13,7 @@ corresponding author: klamt@mpi-magdeburg.mpg.de
 
 [Download code](https://github.com/klamt-Lab/MCS_growth-coupling/releases)
 
-[Download CNA](https://www2.mpi-magdeburg.mpg.de/projects/cna/download.html)
+[Download latest CNA](https://www2.mpi-magdeburg.mpg.de/projects/cna/download.html)
 
 Added Features (CellNetAnalyzer):
 ---------------
