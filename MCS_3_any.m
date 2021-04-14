@@ -1,9 +1,9 @@
 % This script reproduces the results from Table 3:
-% It computes a random MCS for the weakly and strongly growth-coupled
+% It computes a random MCS for the weakly and directionally growth-coupled
 % and substrate uptake production of 10 different products with E. coli.
 % pGCP: production potential at max growth rate
 % wGCP: production at max growth rate
-% sGCP: prodution at all positive growth rates
+% dGCP: prodution at all positive growth rates
 % SUCP: prodcution in all flux states
 % Computations are repeated 12 times and have a time limit of 2 hours.
 %
@@ -26,7 +26,7 @@
 % select coupling type:
 % potential growth-coupling
 % weak growth-coupling
-% strong growth-coupling
+% directional growth-coupling
 % substrate uptake coupling
 coupling = 'potential growth-coupling';
 
@@ -155,7 +155,7 @@ modules{1}.type  = 'lin_constraints';
 % wGCP: At 20% of maximal growth rate, maximize production rate. 
 %       20% of this rate should be ensured at maximal growth after 
 %       the interventions.
-% sGCP: At 20% of maximal growth rate, maximize production rate. 
+% dGCP: At 20% of maximal growth rate, maximize production rate. 
 %       20% of this rate devided by the 20% of the maximal growth rate
 %       is the ratio between production and growth that should be attained
 %       in all flux states.
@@ -176,7 +176,7 @@ fv_fix = nan(cnap.numr,1);
 fv_fix(ismember(cnap.reacID,{biomass_rID})) = r_bm_max20;
 fv = CNAoptimizeFlux(cnap,fv_fix,[],2,-1);
 r_p_20 = 0.2*fv(ismember(cnap.reacID,{product_rID}));
-% 3. Thresholds for sGCP and SUCP
+% 3. Thresholds for dGCP and SUCP
 Y_PBM = r_p_20/r_bm_max20;
 Y_PS  = r_p_20/-fv(ismember(cnap.reacID,{substrate_rID}));
 
@@ -202,7 +202,7 @@ switch coupling
         [modules{2}.V(1,:),modules{2}.v(1,:)] = genV([{product_rID} {'<='} r_p_20 ],cnap);
         [modules{2}.V(2,:),modules{2}.v(2,:)] = genV([{biomass_rID} {'>='} 0.05   ],cnap);
         [modules{2}.c(1,:),~]                 = genV([{biomass_rID} {'>='} 0      ],cnap); % maximize biomass
-    case 'strong growth-coupling'
+    case 'directional growth-coupling'
         modules{2}.sense = 'target';
         modules{2}.type = 'lin_constraints';
         [modules{2}.V(1,:),modules{2}.v(1,:)] = genV([{[product_rID ' / ' biomass_rID]}   {'<='}  Y_PBM ],cnap);
@@ -257,7 +257,7 @@ if ~isempty(mcs(:,succ)) % if mcs have been found
         [valid_T, valid_D] = verify_mcs(full_cnap,mcs,[],[],modules{1}.c*rmap,modules{1}.V*rmap,modules{1}.v);
     elseif isfield(modules{2},'c') % wGCP
         [valid_T, valid_D] = verify_mcs(full_cnap,mcs,modules{2}.V*rmap,modules{2}.v,modules{2}.c*rmap,modules{1}.V*rmap,modules{1}.v);
-    else % sGCP & SUCP
+    else % dGCP & SUCP
         [valid_T, valid_D] = verify_mcs(full_cnap,mcs,modules{2}.V*rmap,modules{2}.v,[],modules{1}.V*rmap,modules{1}.v);
     end
     valid = ~valid_T & valid_D;

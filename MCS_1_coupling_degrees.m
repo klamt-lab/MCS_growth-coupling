@@ -1,9 +1,9 @@
 % This script reproduces the results from Figure 4:
-% It computes all MCS for the weakly and strongly growth-coupled and 
+% It computes all MCS for the weakly and directionally growth-coupled and 
 % substrate uptake production of ethanol with E. coli.
 % pGCP: production potential at max growth rate
 % wGCP: production at max growth rate
-% sGCP: prodution at all positive growth rates
+% dGCP: prodution at all positive growth rates
 % SUCP: prodcution in all flux states
 %
 % MCS computation 
@@ -23,7 +23,7 @@
 atpm = true; % atpm = true  - forces a minimum ATP maintenance rate (as in the original iML1515 model)
              % atpm = false - lifts the ATP maintenance constraint
 maxSolutions = inf;
-coupling = {'potential growth-coupling' 'weak growth-coupling' 'strong growth-coupling' 'substrate uptake coupling'};
+coupling = {'potential growth-coupling' 'weak growth-coupling' 'directional growth-coupling' 'substrate uptake coupling'};
 maxCost = 3;
 options.mcs_search_mode = 2;
 verbose = 1;
@@ -130,7 +130,7 @@ for coupling_i = coupling
             [modules{2}.V(1,:),modules{2}.v(1,:)] = genV([{product_rID} {'<='} 0    ],cnap);
             [modules{2}.V(2,:),modules{2}.v(2,:)] = genV([{biomass_rID} {'>='} 0.05 ],cnap);
             [modules{2}.c(1,:),~]                 = genV([{biomass_rID} {'>='} 0 ],cnap); % maximize biomass
-        case 'strong growth-coupling'
+        case 'directional growth-coupling'
             modules{2}.sense = 'target';
             modules{2}.type = 'lin_constraints';
             [modules{2}.V(1,:),modules{2}.v(1,:)] = genV([{product_rID}   {'<='}  0     ],cnap);
@@ -159,7 +159,7 @@ for coupling_i = coupling
             [valid_T, valid_D] = verify_mcs(full_cnap,mcs,[],[],modules{1}.c*rmap,modules{1}.V*rmap,modules{1}.v);
         elseif isfield(modules{2},'c') % wGCP
             [valid_T, valid_D] = verify_mcs(full_cnap,mcs,modules{2}.V*rmap,modules{2}.v,modules{2}.c*rmap,modules{1}.V*rmap,modules{1}.v);
-        else % sGCP & SUCP
+        else % dGCP & SUCP
             [valid_T, valid_D] = verify_mcs(full_cnap,mcs,modules{2}.V*rmap,modules{2}.v,[],modules{1}.V*rmap,modules{1}.v);
         end
         valid = ~valid_T & valid_D;
@@ -186,10 +186,10 @@ for coupling_i = coupling
             comp_time_wGCP = toc;
             mcs_wGCP   = mcs;
             disp([num2str(size(mcs_wGCP,2))   ' MCS for weak growth-coupling (after '      num2str(comp_time_wGCP) ' s)']);
-        case 'strong growth-coupling'
-            comp_time_sGCP = toc;
-            mcs_sGCP = mcs;
-            disp([num2str(size(mcs_sGCP,2)) ' MCS for strong growth-coupling (after '    num2str(comp_time_sGCP) ' s)']);
+        case 'directional growth-coupling'
+            comp_time_dGCP = toc;
+            mcs_dGCP = mcs;
+            disp([num2str(size(mcs_dGCP,2)) ' MCS for directional growth-coupling (after '    num2str(comp_time_dGCP) ' s)']);
         case 'substrate uptake coupling'
             comp_time_SUCP = toc;
             mcs_SUCP  = mcs;
@@ -205,12 +205,12 @@ reac_names = full_cnap.reacID;
 reac_names(full_cnap.rType ~= 'r',:) = reac_names(full_cnap.rType ~= 'r',[4:end '   ']);
 warning('off','MATLAB:hg:AutoSoftwareOpenGL');
 f1 = figure;
-p = plot_mcs_relationships(reac_names,mcs_wGCP,mcs_sGCP,mcs_SUCP);
-text('String','wGCP-MCS     vs     sGCP-MCS     vs     SUCP-MCS','Units','normalized',...
+p = plot_mcs_relationships(reac_names,mcs_wGCP,mcs_dGCP,mcs_SUCP);
+text('String','wGCP-MCS     vs     dGCP-MCS     vs     SUCP-MCS','Units','normalized',...
     'Position',[0, 1], 'FontUnits','normalized','FontSize',0.053);
 f2 = figure;
-p = plot_mcs_relationships(reac_names,mcs_pGCP,mcs_wGCP,mcs_sGCP);
-text('String','pGCP-MCS     vs     wGCP-MCS     vs     sGCP-MCS','Units','normalized',...
+p = plot_mcs_relationships(reac_names,mcs_pGCP,mcs_wGCP,mcs_dGCP);
+text('String','pGCP-MCS     vs     wGCP-MCS     vs     dGCP-MCS','Units','normalized',...
     'Position',[0, 1], 'FontUnits','normalized','FontSize',0.053);
 warning('on','MATLAB:hg:AutoSoftwareOpenGL');
 disp('Finished.');

@@ -53,11 +53,11 @@ for i = 1:size(mcs_1,2)
 end
 for i = 1:size(mcs_2,2)
     G = G.addnode(['MCS_set_2' num2str(i)]);
-%     mcs_text{G.numnodes,1} = num2str(sum(abs(mcs_strongGC(:,i))));
-%     mcs_text{G.numnodes,1} = mcs2text(reac_names,mcs_strongGC(:,i));
+%     mcs_text{G.numnodes,1} = num2str(sum(abs(mcs_directionalGC(:,i))));
+%     mcs_text{G.numnodes,1} = mcs2text(reac_names,mcs_directionalGC(:,i));
     mcs_text{G.numnodes,1} = [num2str(sum(abs(mcs_2(:,i)))) ' (' mcs2text(reac_names,mcs_2(:,i)) ')'];
 %     x = [x 3+i];
-%     y = [y size(mcs_strongGC,2)-i];
+%     y = [y size(mcs_directionalGC,2)-i];
     x = [x 5];
     y = [y max(size(mcs_1,2),size(mcs_3,2))+size(mcs_1,2)-i];
 end

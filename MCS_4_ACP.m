@@ -1,7 +1,7 @@
 % This script reproduces the results from Figure 5:
-% It computes all MCS for the strongly growth-coupled,
+% It computes all MCS for the directionally growth-coupled,
 % ATP coupled and substrate uptake production of ethanol with E. coli.
-% sGCP: prodution at all positive growth rates
+% dGCP: prodution at all positive growth rates
 % ACP: prodution at all flux states with ATP maintenance
 % SUCP: prodcution in all flux states
 %
@@ -20,7 +20,7 @@
 %
 
 maxSolutions = inf;
-coupling = {'strong growth-coupling' 'ATP coupling' 'substrate uptake coupling'};
+coupling = {'directional growth-coupling' 'ATP coupling' 'substrate uptake coupling'};
 maxCost = 4;
 options.mcs_search_mode = 2;
 verbose = 1;
@@ -112,7 +112,7 @@ for coupling_i = coupling
     disp(char(coupling_i));
     disp('=============');
     switch char(coupling_i)
-        case 'strong growth-coupling'
+        case 'directional growth-coupling'
             modules{2}.sense = 'target';
             modules{2}.type = 'lin_constraints';
             % Target flux states with maximal growth and no ethanol production
@@ -165,10 +165,10 @@ for coupling_i = coupling
         text = 'no MCS found';
     else
         switch char(coupling_i)
-        case 'strong growth-coupling'
-            comp_time_sGCP = toc;
-            mcs_sGCP = mcs;
-            disp([num2str(size(mcs_sGCP,2)) ' MCS for strong growth-coupling (after '    num2str(comp_time_sGCP) ' s)']);
+        case 'directional growth-coupling'
+            comp_time_dGCP = toc;
+            mcs_dGCP = mcs;
+            disp([num2str(size(mcs_dGCP,2)) ' MCS for directional growth-coupling (after '    num2str(comp_time_dGCP) ' s)']);
         case 'ATP coupling'
             comp_time_ACP = toc;
             mcs_ACP   = mcs;
@@ -188,8 +188,8 @@ reac_names = full_cnap.reacID;
 reac_names(full_cnap.rType ~= 'r',:) = reac_names(full_cnap.rType ~= 'r',[4:end '   ']);
 warning('off','MATLAB:hg:AutoSoftwareOpenGL');
 f = figure;
-p = plot_mcs_relationships(reac_names,mcs_sGCP,mcs_ACP,mcs_SUCP);
-text('String','sGCP-MCS     vs     sACP-MCS     vs     SUCP-MCS','Units','normalized',...
+p = plot_mcs_relationships(reac_names,mcs_dGCP,mcs_ACP,mcs_SUCP);
+text('String','dGCP-MCS     vs     sACP-MCS     vs     SUCP-MCS','Units','normalized',...
     'Position',[0, 1], 'FontUnits','normalized','FontSize',0.053);
 warning('on','MATLAB:hg:AutoSoftwareOpenGL');
 disp('Finished.');
