@@ -146,9 +146,9 @@ function [prod_id,species,reactions] = load_pathway(product)
 			species(2)   = struct('spec_id','mev_c','spec_name','(3R)-3,5-Dihydroxy-3-methylpentanoate','fbc_chemicalFormula','C6H11O4','fbc_charge',-1);
 			species(3)   = struct('spec_id','5pmev_c','spec_name','(3R)-3-Hydroxy-3-methyl-5-(phosphonooxy)pentanoate','fbc_chemicalFormula','C6H10O7P','fbc_charge',-3);
 			species(4)   = struct('spec_id','5dpmev_c','spec_name','(3R)-3-Hydroxy-5-{[hydroxy(phosphonooxy)phosphoryl]oxy}-3-methylpentanoate','fbc_chemicalFormula','C6H10O10P2','fbc_charge',-4);
-			species(5)   = struct('spec_id','bsb_c','spec_name','bisaboleme','fbc_chemicalFormula','C15H24','fbc_charge',0);
-			species(6)   = struct('spec_id','bsb_p','spec_name','bisaboleme (periplasm)','fbc_chemicalFormula','C15H24','fbc_charge',0);
-			species(7)   = struct('spec_id','bsb_e','spec_name','bisaboleme (extracellular)','fbc_chemicalFormula','C15H24','fbc_charge',0);
+			species(5)   = struct('spec_id','bsb_c','spec_name','bisabolene','fbc_chemicalFormula','C15H24','fbc_charge',0);
+			species(6)   = struct('spec_id','bsb_p','spec_name','bisabolene (periplasm)','fbc_chemicalFormula','C15H24','fbc_charge',0);
+			species(7)   = struct('spec_id','bsb_e','spec_name','bisabolene (extracellular)','fbc_chemicalFormula','C15H24','fbc_charge',0);
 			reactions(1) = struct('reac_id','HMGCOAS','equation','1 aacoa_c + 1 accoa_c + 1 h2o_c = 1 coa_c + 1 h_c + 1 hmgcoa_c','lb',-1000,'ub',1000,'fbc_geneProductAssociation','mep');
 			reactions(2) = struct('reac_id','HMGCOAR','equation','2 h_c + 2 nadph_c + 1 hmgcoa_c = 1 coa_c + 2 nadp_c + 1 mev_c','lb',-1000,'ub',1000,'fbc_geneProductAssociation','mep');
 			reactions(3) = struct('reac_id','MEVK1','equation','1 atp_c + 1 mev_c = 1 adp_c + 1 h_c + 1 5pmev_c','lb',0,'ub',1000,'fbc_geneProductAssociation','mep');
